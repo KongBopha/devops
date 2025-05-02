@@ -1,0 +1,26 @@
+# File: docker-compose.yml
+services:
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    privileged: true
+    user: root
+    ports:
+      - 8080:8080
+      - 50000:50000
+    container_name: jenkins-tp02-I4B
+    volumes:
+      - "D:/SCHOOL_WORKS/ITC_WORK/ITC_I4_DOC/Semester_II/DevOps/TP/TP01/jenkins_home:/var/jenkins_home"
+    links:
+      - laravel-agent
+
+  laravel-agent:
+    build: ./laravel-agent
+    image: i4b/jenkins-agent:latest
+    container_name: jenkins-laravel-agent-I4B
+    environment:
+      - JENKINS_URL=http://localhost:8080
+      - JENKINS_AGENT_NAME=laravel-agent-I4B
+      - "JENKINS_AGENT_SSH_PUBKEY=ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPvluxpOwm/4Wl78IT8dsqy5OnBu+WNF1fj30K5QP0IP msi@KONG-BOPHA"
+    volumes:
+      - "D:/SCHOOL_WORKS/ITC_WORK/ITC_I4_DOC/Semester_II/DevOps/TP/TP01/jenkins_agent_home:/var/jenkins_home"
